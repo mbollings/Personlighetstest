@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3ee">
+  <title>Parrapport</title>
+  <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+<main class="side rapport">
+
+  <!-- Legg inn kodene -->
+  <section id="vis-inndata" class="skjult">
+    <p class="svak liten">For oss to</p>
+    <h1>Parrapport</h1>
+    <p>Lim inn resultatkodene deres, eller hele lenkene til resultatene. Rapporten lages her på telefonen, og ingenting sendes noe sted.</p>
+    <div class="kort">
+      <label for="kode1">Resultatkode 1</label>
+      <input type="text" id="kode1" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="F.eks. 1a7c…-Kari">
+      <p class="feilmelding" id="feil1" aria-live="polite"></p>
+      <label for="kode2" style="margin-top:12px">Resultatkode 2</label>
+      <input type="text" id="kode2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Partnerens kode">
+      <p class="feilmelding" id="feil2" aria-live="polite"></p>
+      <div class="knapper"><button class="knapp" id="knapp-vis">Vis parrapporten</button></div>
+    </div>
+    <p class="svak liten" id="egen-kode-info"></p>
+    <p class="liten"><a href="index.html">← Til forsiden</a></p>
+    <p class="liten svak skjult" id="demo-par">Demo: <a href="#" id="lenke-demo-par">vis parrapporten for de fiktive personene Ingrid og Erik</a></p>
+  </section>
+
+  <!-- Selve rapporten -->
+  <div id="vis-rapport" class="skjult"></div>
+</main>
+
+<script src="data/ipip-neo-120.js"></script>
+<script src="data/ecr-r.js"></script>
+<script src="data/tolkninger.js"></script>
+<script src="data/par-tekster.js"></script>
+<script src="js/skaring.js"></script>
+<script src="js/kode.js"></script>
+<script src="js/tolkning.js"></script>
+<script src="js/paranalyse.js"></script>
+<script src="data/portretter.js"></script>
+<script src="js/portrett.js"></script>
+<script src="js/diagrammer.js"></script>
+<script src="js/lagring.js"></script>
+<script src="js/del.js"></script>
+<script src="js/testdata.js"></script>
+<script src="js/parrapport.js"></script>
+</body>
+</html>

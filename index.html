@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f3ee">
+  <title>Personlighetstest</title>
+  <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+<main class="side" id="app">
+
+  <!-- 1. Forside -->
+  <section id="vis-start">
+    <p class="svak liten">For oss to</p>
+    <h1>Bli bedre kjent med deg selv og hverandre</h1>
+    <p>Testen har to deler og tar omtrent 20–25 minutter. Du kan ta pause når som helst. Svarene lagres underveis, bare på denne telefonen.</p>
+
+    <div class="kort">
+      <p><strong>Del 1 · Personlighet</strong> <span class="svak">(120 påstander)</span><br>
+      <span class="svak liten">Big Five, målt med IPIP-NEO-120 (Johnson, 2014)</span></p>
+      <p style="margin:0"><strong>Del 2 · Nære relasjoner</strong> <span class="svak">(36 påstander)</span><br>
+      <span class="svak liten">Tilknytningsstil, målt med ECR-R (Fraley, Waller og Brennan, 2000)</span></p>
+    </div>
+
+    <div class="forbehold">
+      <strong>Et verktøy for selvinnsikt, ikke en diagnose</strong>
+      Dette er ikke en klinisk eller diagnostisk test. Resultatene beskriver tendenser slik du selv opplever dem akkurat nå, og de kan variere med dagsformen.
+    </div>
+
+    <div id="fortsett-boks" class="kort skjult">
+      <p style="margin-bottom:10px"><strong>Du har en test på gang.</strong><br><span class="svak" id="fortsett-tekst"></span></p>
+      <div class="knapper">
+        <button class="knapp" id="knapp-fortsett">Fortsett der du slapp</button>
+        <button class="knapp sekundar" id="knapp-start-pa-nytt">Start på nytt</button>
+      </div>
+    </div>
+
+    <div id="ferdig-boks" class="kort skjult">
+      <p style="margin-bottom:10px"><strong>Du har tatt testen.</strong></p>
+      <div class="knapper">
+        <a class="knapp" id="lenke-se-resultat" href="resultat.html">Se resultatet ditt</a>
+        <button class="knapp sekundar" id="knapp-ta-pa-nytt">Ta testen på nytt</button>
+      </div>
+    </div>
+
+    <div id="ny-boks">
+      <label for="navn">Fornavnet ditt</label>
+      <input type="text" id="navn" autocomplete="given-name" maxlength="30" placeholder="F.eks. Kari">
+      <p class="svak liten" style="margin-top:6px">Navnet vises bare i rapporten og i resultatkoden du selv velger å dele.</p>
+      <div class="knapper">
+        <button class="knapp" id="knapp-start">Start testen</button>
+      </div>
+    </div>
+
+    <p class="sentrert liten" style="margin-top:20px"><a href="par.html">Har dere begge tatt testen? Gå til parsiden →</a></p>
+    <p class="sentrert liten svak" id="demo-lenker"></p>
+  </section>
+
+  <!-- 2. Innledning til en del -->
+  <section id="vis-intro" class="skjult">
+    <div class="fremdrift"><div class="fremdrift-spor"><div class="fremdrift-fyll" id="intro-fyll"></div></div></div>
+    <p class="svak liten" id="intro-del"></p>
+    <h1 id="intro-tittel"></h1>
+    <div class="kort"><p id="intro-instruks" style="margin:0"></p></div>
+    <div class="knapper"><button class="knapp" id="knapp-intro-videre">Start</button></div>
+    <div class="navigasjon"><button class="knapp lenke" id="knapp-intro-tilbake">← Tilbake</button><span></span></div>
+  </section>
+
+  <!-- 3. Én påstand om gangen -->
+  <section id="vis-sporsmal" class="skjult">
+    <div class="fremdrift">
+      <div class="fremdrift-tekst"><span id="fremdrift-del"></span><span id="fremdrift-tall"></span></div>
+      <div class="fremdrift-spor"><div class="fremdrift-fyll" id="fremdrift-fyll"></div></div>
+    </div>
+    <p class="pastand" id="pastand" aria-live="polite"></p>
+    <div id="svarvalg"></div>
+    <div class="navigasjon">
+      <button class="knapp lenke" id="knapp-tilbake">← Forrige</button>
+      <button class="knapp lenke" id="knapp-pause">Ta pause</button>
+    </div>
+  </section>
+
+  <!-- 4. Ferdig -->
+  <section id="vis-ferdig" class="skjult">
+    <div class="sentrert"><div class="ikon-stor" aria-hidden="true">✓</div><h1>Takk, <span id="ferdig-navn"></span>!</h1></div>
+    <p>Du har svart på alle 156 påstandene. Resultatet ditt er klart.</p>
+    <div class="knapper"><a class="knapp" id="lenke-resultat" href="resultat.html">Se resultatet ditt</a></div>
+
+    <h2>Del med partneren din</h2>
+    <p class="svak">Denne koden er hele resultatet ditt, i komprimert form. Den inneholder ikke svarene dine på enkeltpåstander. Den forlater bare telefonen hvis du selv sender den.</p>
+    <p class="kode" id="resultatkode"></p>
+    <div class="knapper">
+      <button class="knapp sekundar" id="knapp-kopier-kode">Kopier koden</button>
+      <button class="knapp sekundar" id="knapp-del-lenke">Del lenke til resultatet</button>
+    </div>
+    <p class="svak liten" id="kopier-melding" aria-live="polite"></p>
+  </section>
+
+  <noscript><p>Denne siden trenger JavaScript.</p></noscript>
+</main>
+
+<script src="data/ipip-neo-120.js"></script>
+<script src="data/ecr-r.js"></script>
+<script src="js/skaring.js"></script>
+<script src="js/kode.js"></script>
+<script src="js/lagring.js"></script>
+<script src="js/del.js"></script>
+<script src="js/testdata.js"></script>
+<script src="js/testflyt.js"></script>
+</body>
+</html>
