@@ -13,15 +13,16 @@
 
   <!-- 1. Forside -->
   <section id="vis-start">
-    <p class="svak liten">For oss to</p>
-    <h1>Bli bedre kjent med deg selv og hverandre</h1>
-    <p>Testen har to deler og tar omtrent 20–25 minutter. Du kan ta pause når som helst. Svarene lagres underveis, bare på denne telefonen.</p>
+    <div class="hero-figur" id="forside-figur" aria-hidden="true"></div>
+    <p class="overlinje sentrert">For oss to</p>
+    <h1 class="sentrert" style="font-size:2.3rem">Bli bedre kjent med deg selv og hverandre</h1>
+    <p class="sentrert svak">To grundige, forskningsbaserte tester. Omtrent 20–25 minutter, med pause når du vil. Svarene lagres bare på denne telefonen.</p>
 
-    <div class="kort">
-      <p><strong>Del 1 · Personlighet</strong> <span class="svak">(120 påstander)</span><br>
-      <span class="svak liten">Big Five, målt med IPIP-NEO-120 (Johnson, 2014)</span></p>
-      <p style="margin:0"><strong>Del 2 · Nære relasjoner</strong> <span class="svak">(36 påstander)</span><br>
-      <span class="svak liten">Tilknytningsstil, målt med ECR-R (Fraley, Waller og Brennan, 2000)</span></p>
+    <div class="deler">
+      <div class="del-kort"><span class="del-nr">1</span><p><strong>Personlighet</strong> <span class="svak">· 120 påstander</span><br>
+      <span class="svak liten">Big Five, målt med IPIP-NEO-120 (Johnson, 2014)</span></p></div>
+      <div class="del-kort"><span class="del-nr" style="color:var(--serie-1)">2</span><p><strong>Nære relasjoner</strong> <span class="svak">· 36 påstander</span><br>
+      <span class="svak liten">Tilknytning, målt med ECR-R (Fraley, Waller og Brennan, 2000)</span></p></div>
     </div>
 
     <div class="forbehold">
@@ -61,9 +62,10 @@
   <!-- 2. Innledning til en del -->
   <section id="vis-intro" class="skjult">
     <div class="fremdrift"><div class="fremdrift-spor"><div class="fremdrift-fyll" id="intro-fyll"></div></div></div>
-    <p class="svak liten" id="intro-del"></p>
+    <p class="intro-tall" id="intro-tall" aria-hidden="true"></p>
+    <p class="overlinje" id="intro-del"></p>
     <h1 id="intro-tittel"></h1>
-    <div class="kort"><p id="intro-instruks" style="margin:0"></p></div>
+    <p id="intro-instruks" class="svak" style="font-size:1.05rem"></p>
     <div class="knapper"><button class="knapp" id="knapp-intro-videre">Start</button></div>
     <div class="navigasjon"><button class="knapp lenke" id="knapp-intro-tilbake">← Tilbake</button><span></span></div>
   </section>
@@ -73,6 +75,7 @@
     <div class="fremdrift">
       <div class="fremdrift-tekst"><span id="fremdrift-del"></span><span id="fremdrift-tall"></span></div>
       <div class="fremdrift-spor"><div class="fremdrift-fyll" id="fremdrift-fyll"></div></div>
+      <p class="oppmuntring" id="oppmuntring" aria-live="polite"></p>
     </div>
     <p class="pastand" id="pastand" aria-live="polite"></p>
     <div id="svarvalg"></div>
@@ -84,7 +87,8 @@
 
   <!-- 4. Ferdig -->
   <section id="vis-ferdig" class="skjult">
-    <div class="sentrert"><div class="ikon-stor" aria-hidden="true">✓</div><h1>Takk, <span id="ferdig-navn"></span>!</h1></div>
+    <div class="hero-figur" id="ferdig-figur" aria-hidden="true"></div>
+    <div class="sentrert"><p class="overlinje">Ferdig</p><h1>Takk, <span id="ferdig-navn"></span>!</h1></div>
     <p>Du har svart på alle 156 påstandene. Resultatet ditt er klart.</p>
     <div class="knapper"><a class="knapp" id="lenke-resultat" href="resultat.html">Se resultatet ditt</a></div>
 
@@ -108,6 +112,7 @@
 <script src="js/lagring.js"></script>
 <script src="js/del.js"></script>
 <script src="js/testdata.js"></script>
+<script src="js/diagrammer.js"></script>
 <script src="js/testflyt.js"></script>
 </body>
 </html>

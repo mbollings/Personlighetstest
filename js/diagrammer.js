@@ -15,7 +15,9 @@ PT.diagrammer = (function () {
 
   // ---------- Radardiagram ----------
   // akser: ["Nevrotisisme", ...]  serier: [{ navn, verdier: [0–100, ...] }]
-  function radar(akser, serier) {
+  // akseKlasser (valgfritt): f.eks. ["t-N", "t-E", …] gir aksenavn og prikker trekkets farge.
+  function radar(akser, serier, akseKlasser) {
+    var kl = function (i) { return akseKlasser ? ' ' + akseKlasser[i] : ''; };
     var B = 420, H = 320, cx = 210, cy = 160, R = 96, n = akser.length;
     function punkt(i, verdi) {
       var v = (-90 + i * 360 / n) * Math.PI / 180;
@@ -33,7 +35,7 @@ PT.diagrammer = (function () {
       // Toppaksen får teksten over punktet. De andre får navnet på én linje og tallet under.
       var topp = tekst[1] < cy - R * 0.9;
       var y = topp ? tekst[1] - (serier.length === 1 ? 18 : 4) : tekst[1] + (tekst[1] > cy + 10 ? 10 : 0);
-      s += '<text class="akse" x="' + r1(tekst[0]) + '" y="' + r1(y) + '" text-anchor="' + anker + '">' + esc(navn);
+      s += '<text class="akse' + kl(i) + '" x="' + r1(tekst[0]) + '" y="' + r1(y) + '" text-anchor="' + anker + '">' + esc(navn);
       if (serier.length === 1) {
         s += '<tspan class="akse-verdi" x="' + r1(tekst[0]) + '" dy="15">' + Math.round(serier[0].verdier[i]) + ' %</tspan>';
       }
@@ -44,7 +46,7 @@ PT.diagrammer = (function () {
       s += '<polygon class="flate serie-' + si + '" points="' + pts + '"/>';
       serie.verdier.forEach(function (v, i) {
         var p = punkt(i, Math.max(v, 2));
-        s += '<circle class="prikk serie-' + si + '" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="4"/>';
+        s += '<circle class="prikk ' + (serier.length === 1 && akseKlasser ? akseKlasser[i] : 'serie-' + si) + '" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="' + (serier.length === 1 ? 5.5 : 4) + '"/>';
       });
     });
     return s + '</svg>';
@@ -101,5 +103,76 @@ PT.diagrammer = (function () {
     return s + '</svg>';
   }
 
-  return { radar: radar, soyle: soyle, tilknytning: tilknytning, esc: esc };
+  // ---------- Fingeravtrykk ----------
+  // En myk, organisk figur tegnet ut fra de fem trekkene. Hver person får sin egen form.
+  // serier: [{ verdier: [5 tall 0–100] }]. Én serie: tre lag i ulike nyanser + fargeprikker per trekk.
+  // To serier: to figurer oppå hverandre i personfargene.
+  var TREKK = ['N', 'E', 'O', 'A', 'C'];
+
+  function myktOmriss(punkter) {
+    // Lukket Catmull–Rom-kurve gjennom punktene, omregnet til kubiske Bézier-kurver.
+    var n = punkter.length, d = 'M' + r1(punkter[0][0]) + ' ' + r1(punkter[0][1]);
+    for (var i = 0; i < n; i++) {
+      var p0 = punkter[(i - 1 + n) % n], p1 = punkter[i], p2 = punkter[(i + 1) % n], p3 = punkter[(i + 2) % n];
+      var c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      var c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ' C' + r1(c1[0]) + ' ' + r1(c1[1]) + ' ' + r1(c2[0]) + ' ' + r1(c2[1]) + ' ' + r1(p2[0]) + ' ' + r1(p2[1]);
+    }
+    return d + 'Z';
+  }
+
+  function avtrykkPunkter(verdier, cx, cy, skala) {
+    // Ett punkt per trekk, og et litt innsunket punkt mellom hvert par (gir en blomsteraktig form).
+    var pkt = [], n = verdier.length;
+    for (var i = 0; i < n; i++) {
+      var v = (-90 + i * 360 / n) * Math.PI / 180, r = (38 + verdier[i] * 0.88) * skala;
+      pkt.push([cx + Math.cos(v) * r, cy + Math.sin(v) * r]);
+      var v2 = (-90 + (i + 0.5) * 360 / n) * Math.PI / 180;
+      var r2 = (38 + (verdier[i] + verdier[(i + 1) % n]) / 2 * 0.88) * skala * 0.8;
+      pkt.push([cx + Math.cos(v2) * r2, cy + Math.sin(v2) * r2]);
+    }
+    return pkt;
+  }
+
+  // lagFarger (valgfritt, én person): trekk-koder for de to indre lagene, f.eks. ['C', 'A'].
+  function fingeravtrykk(serier, lagFarger) {
+    var S = 300, c = 150;
+    var s = '<svg class="avtrykk" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Personlig fingeravtrykk tegnet ut fra de fem trekkene">';
+    s += '<circle class="avtrykk-strek" cx="' + c + '" cy="' + c + '" r="' + (38 + 50 * 0.88) + '" stroke-dasharray="2 4"/>';
+    s += '<circle class="avtrykk-strek" cx="' + c + '" cy="' + c + '" r="' + (38 + 100 * 0.88) + '"/>';
+    if (serier.length === 1) {
+      var v = serier[0].verdier;
+      [[1, 0.16, 'serie-0'], [0.74, 0.3, lagFarger ? 't-' + lagFarger[0] : 'serie-0'], [0.48, 0.42, lagFarger ? 't-' + lagFarger[1] : 'serie-0']].forEach(function (lag) {
+        s += '<path class="avtrykk-lag ' + lag[2] + '" fill-opacity="' + lag[1] + '" d="' + myktOmriss(avtrykkPunkter(v, c, c, lag[0])) + '"/>';
+      });
+      v.forEach(function (verdi, i) {
+        var a = (-90 + i * 72) * Math.PI / 180, r = 38 + verdi * 0.88;
+        s += '<circle class="avtrykk-prikk t-' + TREKK[i] + '" cx="' + r1(c + Math.cos(a) * r) + '" cy="' + r1(c + Math.sin(a) * r) + '" r="7.5"/>';
+      });
+    } else {
+      serier.forEach(function (serie, si) {
+        s += '<path class="avtrykk-lag serie-' + si + '" fill-opacity=".28" d="' + myktOmriss(avtrykkPunkter(serie.verdier, c, c, 1)) + '"/>';
+        s += '<path class="avtrykk-lag serie-' + si + '" fill-opacity=".22" d="' + myktOmriss(avtrykkPunkter(serie.verdier, c, c, 0.55)) + '"/>';
+      });
+    }
+    return s + '</svg>';
+  }
+
+  // ---------- Skala med ord i begge ender ----------
+  // merker: [{ prosent, serie }]. Én person: fyll i trekkets farge + merke. To personer: to merker.
+  function spektrum(poler, merker, opts) {
+    opts = opts || {};
+    var h = '<div class="spektrum' + (opts.stor ? ' stor' : '') + (opts.trekk ? ' t-' + opts.trekk : '') + '">' +
+      '<div class="spektrum-poler"><span>' + esc(poler[0]) + '</span><span>' + esc(poler[1]) + '</span></div>' +
+      '<div class="spektrum-spor">';
+    if (merker.length === 1) h += '<div class="spektrum-fyll" style="width:' + merker[0].prosent.toFixed(1) + '%"></div>';
+    h += '<div class="spektrum-midt" aria-hidden="true"></div>';
+    merker.forEach(function (m) {
+      h += '<span class="spektrum-merke' + (merker.length > 1 ? ' serie-' + m.serie : '') + '" style="left:' +
+        Math.min(98.5, Math.max(1.5, m.prosent)).toFixed(1) + '%"></span>';
+    });
+    return h + '</div></div>';
+  }
+
+  return { radar: radar, soyle: soyle, tilknytning: tilknytning, fingeravtrykk: fingeravtrykk, spektrum: spektrum, esc: esc };
 })();

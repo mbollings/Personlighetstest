@@ -10,6 +10,23 @@ window.PT_DATA = window.PT_DATA || {};
 PT_DATA.tolkninger = {
   grenser: { lav: 37.5, hoy: 62.5 },
 
+  // Ord i hver ende av skalaene (lav ↔ høy). Ingen av endene er bedre enn den andre.
+  poler: {
+    N: ['Rolig', 'Sensitiv'], E: ['Innadvendt', 'Utadvendt'], O: ['Jordnær', 'Nysgjerrig'],
+    A: ['Direkte', 'Imøtekommende'], C: ['Spontan', 'Strukturert'],
+    N1: ['Ubekymret', 'Bekymret'], N2: ['Tålmodig', 'Lett irritert'], N3: ['Lett til sinns', 'Ofte nedfor'],
+    N4: ['Sosialt trygg', 'Sjenert'], N5: ['Måteholden', 'Lystbetont'], N6: ['Stresstålig', 'Lett overveldet'],
+    E1: ['Reservert', 'Imøtekommende'], E2: ['Små lag', 'Store lag'], E3: ['Lar andre lede', 'Tar styringen'],
+    E4: ['Rolig tempo', 'Høyt tempo'], E5: ['Trygghetssøkende', 'Spenningssøkende'], E6: ['Avdempet', 'Sprudlende'],
+    O1: ['Konkret', 'Drømmende'], O2: ['Nøktern', 'Estetisk'], O3: ['Saklig', 'Følelsesbevisst'],
+    O4: ['Vanedyr', 'Eventyrlysten'], O5: ['Praktisk', 'Teoretisk'], O6: ['Tradisjonell', 'Liberal'],
+    A1: ['Skeptisk', 'Tillitsfull'], A2: ['Taktisk', 'Oppriktig'], A3: ['Prioriterer seg selv', 'Hjelpsom'],
+    A4: ['Konfronterende', 'Fredsommelig'], A5: ['Selvsikker', 'Beskjeden'], A6: ['Saklig', 'Medfølende'],
+    C1: ['Tvilende', 'Mestringssikker'], C2: ['Avslappet', 'Ryddig'], C3: ['Fleksibel', 'Pliktoppfyllende'],
+    C4: ['Nøysom', 'Ambisiøs'], C5: ['Utsetter', 'Disiplinert'], C6: ['Impulsiv', 'Ettertenksom'],
+    ANX: ['Trygg', 'Bekymret'], AVO: ['Søker nærhet', 'Trenger avstand']
+  },
+
   domener: {
     N: {
       navn: 'Nevrotisisme',

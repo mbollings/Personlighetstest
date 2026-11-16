@@ -22,11 +22,11 @@ Det går fint å gjøre dette fra en privat PC. Kopier i så fall hele mappa `Pe
 ## 3. Last opp filene
 1. På siden som nå vises, trykk lenken **uploading an existing file** (midt på siden).
 2. Åpne mappa `Personlighetstest` i Filutforsker.
-3. Merk **alt** i mappa (Ctrl+A), altså både filene og mappene `css`, `data` og `js`.
+3. Merk **alt** i mappa (Ctrl+A), altså både filene og mappene `css`, `data`, `fonts` og `js`.
 4. **Dra** det du har merket inn i det store feltet i nettleseren. Mappene blir med, med innholdet sitt.
 5. Vent til alle filene er listet opp under feltet.
 6. Nederst, under «Commit changes»: Skriv for eksempel `Første versjon`, og trykk den grønne knappen **Commit changes**.
-7. Sjekk at du ser mappene `css`, `data` og `js` og filene `index.html`, `resultat.html` og `par.html` i lista.
+7. Sjekk at du ser mappene `css`, `data`, `fonts` og `js` og filene `index.html`, `resultat.html` og `par.html` i lista.
 
 > Mangler mappene? Noen nettlesere tar ikke med mapper når du drar. Trykk da **Add file → Upload files**
 > og dra hver mappe inn for seg.

@@ -61,6 +61,28 @@
     window.scrollTo(0, 0);
   }
 
+  // Del 2 får sin egen farge (via klassen del-2 på hele siden).
+  function settDel(del) { $('app').classList.toggle('del-2', del === 2); }
+
+  // Starter en kort inn-animasjon på nytt for et element.
+  function animer(el) { el.classList.remove('inn'); void el.offsetWidth; el.classList.add('inn'); }
+
+  // Små oppmuntringer underveis. Vises i tre påstander fra og med milepælen.
+  var OPPMUNTRING = {
+    1: [[30, 'Godt i gang.'], [60, 'Halvveis i del 1!'], [96, 'Snart ferdig med del 1.']],
+    2: [[1, 'Siste del. 36 påstander igjen.'], [18, 'Halvveis i del 2!'], [32, 'Nesten i mål.']]
+  };
+  function oppmuntring(del, iDelen) {
+    var treff = OPPMUNTRING[del].filter(function (m) { return iDelen >= m[0] && iDelen < m[0] + 3; });
+    return treff.length ? treff[0][1] : '';
+  }
+
+  // Dekorativ figur på forsiden (et eksempel på et fingeravtrykk).
+  function tegnForsideFigur() {
+    if (!PT.diagrammer || $('forside-figur').innerHTML) return;
+    $('forside-figur').innerHTML = PT.diagrammer.fingeravtrykk([{ verdier: [48, 72, 84, 66, 58] }], ['O', 'E']);
+  }
+
   function visStart() {
     tilstand = PT.lagring.les();
     var paGang = tilstand && !tilstand.ferdig;
@@ -73,6 +95,8 @@
         ' har svart på ' + antallBesvart() + ' av ' + N_TOTALT + ' påstander.';
     }
     if (ferdig) $('lenke-se-resultat').href = 'resultat.html#' + tilstand.kode;
+    settDel(1);
+    tegnForsideFigur();
     vis('vis-start');
   }
 
@@ -85,7 +109,10 @@
     $('intro-instruks').textContent = data.instruks.no;
     $('knapp-intro-videre').textContent = del === 1 ? 'Start del 1' : 'Start del 2';
     $('intro-fyll').style.width = (antallBesvart() / N_TOTALT * 100) + '%';
+    $('intro-tall').textContent = del;
+    settDel(del);
     vis('vis-intro');
+    animer($('vis-intro'));
   }
 
   function visSporsmal() {
@@ -99,7 +126,9 @@
     $('fremdrift-del').textContent = info.del === 1 ? 'Del 1 · Personlighet' : 'Del 2 · Nære relasjoner';
     $('fremdrift-tall').textContent = iDelen + ' av ' + delLengde;
     $('fremdrift-fyll').style.width = (tilstand.steg / N_TOTALT * 100) + '%';
+    $('oppmuntring').textContent = oppmuntring(info.del, iDelen);
     $('pastand').textContent = info.p.no;
+    settDel(info.del);
 
     var boks = $('svarvalg');
     boks.innerHTML = '';
@@ -122,6 +151,8 @@
       boks.appendChild(ankere);
     }
     vis('vis-sporsmal');
+    animer($('pastand'));
+    animer(boks);
   }
 
   function svarKnapp(verdi, tekst, valgt) {
@@ -182,7 +213,17 @@
     $('resultatkode').textContent = tilstand.kode;
     $('lenke-resultat').href = 'resultat.html#' + tilstand.kode;
     $('kopier-melding').textContent = '';
+    try {
+      // Fingeravtrykket til personen, tegnet ut fra resultatkoden.
+      var p = PT.kode.lesKode(tilstand.kode, IPIP, ECR).profil;
+      var D5 = ['N', 'E', 'O', 'A', 'C'];
+      var verdier = D5.map(function (d) { return p.domener[d].prosent; });
+      var topp = D5.slice().sort(function (a, b) { return Math.abs(p.domener[b].prosent - 50) - Math.abs(p.domener[a].prosent - 50); });
+      $('ferdig-figur').innerHTML = PT.diagrammer.fingeravtrykk([{ verdier: verdier }], topp.slice(0, 2));
+    } catch (e) { $('ferdig-figur').innerHTML = ''; }
+    settDel(1);
     vis('vis-ferdig');
+    animer($('vis-ferdig'));
   }
 
   function kopier(tekst, melding) {
