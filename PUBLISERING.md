@@ -50,6 +50,10 @@ Det går fint å gjøre dette fra en privat PC. Kopier i så fall hele mappa `Pe
 
 ## 6. Ta testen
 1. Ta testen hver for dere, på hver deres telefon. Dere kan ta pause når som helst.
+   **Bruk en vanlig fane (ikke privat), og samme nettleser hele veien.** Tar dere testen fra hjemskjermen,
+   fortsett derfra, og ikke fjern snarveien underveis.
+   Når du er ferdig: **Ta vare på resultatet** med **Send lenken til meg selv** eller **Last ned som fil**.
+   Forsvinner det fra telefonen, åpner du det igjen under **Har du en kode, lenke eller fil fra før?** på forsiden.
 2. Når dere er ferdige: Trykk **Kopier koden** eller **Del lenke til resultatet** og send den til hverandre.
 3. Åpne **parsiden** (lenken nederst på forsiden eller i rapporten). Egen kode fylles inn automatisk,
    og partnerens kode limer du inn.
@@ -60,6 +64,8 @@ Det går fint å gjøre dette fra en privat PC. Kopier i så fall hele mappa `Pe
 2. Trykk **Add file → Upload files**, dra inn den endrede fila og trykk **Commit changes**.
    Fila med samme navn blir erstattet.
 3. Endringen er ute etter et minutt eller to. Last siden på nytt på mobilen (eventuelt to ganger).
+   Ser du fortsatt gammel versjon, vent 10 minutter. Ikke slett nettleserdata og ikke fjern hjemskjermsnarveien
+   før resultatet er lagret et annet sted.
 
 Endringer i norske tekster er helt trygge. Resultatkoder dere allerede har fått, virker fortsatt.
 

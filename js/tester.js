@@ -246,6 +246,24 @@
       kaster(function () { K.lesKode(kode.slice(0, 5) + '!' + kode.slice(6), IPIP, ECR); }, 'ugyldig tegn');
       kaster(function () { K.lesKode('', IPIP, ECR); }, 'tom kode');
     });
+    test('finnKoder finner koden i kode, lenke, melding og parlenke', function () {
+      var a = K.lagKode(profilFra(5), 'Åse-Kari', IPIP, ECR), b = K.lagKode(profilFra(9), '', IPIP, ECR);
+      likt(K.finnKoder(a), [a], 'kode');
+      likt(K.finnKoder('Her: https://eksempel.no/resultat.html#' + a + '\nhilsen meg'), [a], 'lenke i melding');
+      likt(K.finnKoder('https://eksempel.no/par.html#' + a + '+' + b), [a, b], 'parlenke');
+      likt(K.finnKoder(b.slice(0, 20)), [], 'avkuttet');
+      likt(K.finnKoder(b + 'x'), [], 'for lang');
+      likt(K.finnKoder(''), [], 'tom');
+    });
+    test('En lagret fil gir samme resultat tilbake', function () {
+      for (var i = 1; i <= 50; i++) {
+        var p = profilFra(i), kode = K.lagKode(p, i % 2 ? 'Åse' : '', IPIP, ECR);
+        var fil = '﻿' + PT.del.filTekst(kode, i % 2 ? 'Åse' : '', 'https://eksempel.no/resultat.html#' + kode, '24.11.2026');
+        var koder = K.finnKoder(fil);
+        likt(koder, [kode], 'fil ' + i);
+        sammeSummer(p, K.lesKode(koder[0], IPIP, ECR).profil);
+      }
+    });
     test('Koden inneholder ikke de enkelte svarene (bare summer)', function () {
       var a = fyll(120, 3), b = fyll(120, 3);
       a[0] = 5; a[30] = 1;   // to N1-påstander: 5 + 1

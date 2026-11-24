@@ -11,6 +11,7 @@
 
   var tilstand = null;   // alt som lagres; se nyTilstand()
   var laast = false;     // hindrer dobbelttrykk mens vi bytter påstand
+  var demo = false;      // true mens vi viser en demoperson
 
   function $(id) { return document.getElementById(id); }
   function tom(n) { var a = []; for (var i = 0; i < n; i++) a.push(null); return a; }
@@ -39,7 +40,12 @@
     };
   }
 
-  function lagre() { PT.lagring.skriv(tilstand); }
+  // Demoen lagrer ingenting, så den aldri overskriver et ekte resultat.
+  function lagre() {
+    if (demo) return;
+    visLagreVarsel(!PT.lagring.skriv(tilstand));
+  }
+  function visLagreVarsel(feilet) { $('lagre-varsel').classList.toggle('skjult', !feilet); }
 
   // Hvilken påstand hører til et gitt steg?
   function pastandFor(steg) {
@@ -85,6 +91,8 @@
 
   function visStart() {
     tilstand = PT.lagring.les();
+    visLagreVarsel(!PT.lagring.virker());
+    $('hent-husk-rad').classList.toggle('skjult', !!tilstand);
     var paGang = tilstand && !tilstand.ferdig;
     var ferdig = tilstand && tilstand.ferdig;
     $('fortsett-boks').classList.toggle('skjult', !paGang);
@@ -205,6 +213,7 @@
     // Når testen er ferdig, beholder vi bare navn og kode. De enkelte svarene slettes.
     tilstand = { versjon: 1, navn: tilstand.navn, ferdig: true, kode: kode };
     lagre();
+    if (!demo) PT.lagring.beOmVarig();
     visFerdig();
   }
 
@@ -213,6 +222,7 @@
     $('resultatkode').textContent = tilstand.kode;
     $('lenke-resultat').href = 'resultat.html#' + tilstand.kode;
     $('kopier-melding').textContent = '';
+    PT.del.lagreBoks($('lagre-boks'), tilstand.kode, tilstand.navn);
     try {
       // Fingeravtrykket til personen, tegnet ut fra resultatkoden.
       var p = PT.kode.lesKode(tilstand.kode, IPIP, ECR).profil;
@@ -233,20 +243,43 @@
   }
 
   function delLenke() {
-    var lenke = PT.del.lenkeTil('resultat.html', tilstand.kode);
-    if (location.protocol === 'file:') {
-      kopier(lenke, 'Lenken er kopiert. Merk: den virker først for andre når siden er publisert på nett.');
-      return;
-    }
-    if (navigator.share) {
-      navigator.share({ title: 'Resultatet mitt fra personlighetstesten', url: lenke }).catch(function () { /* avbrutt */ });
-    } else {
-      kopier(lenke, 'Lenken er kopiert. Lim den inn i en melding til partneren din.');
-    }
+    PT.del.delLenke(tilstand.kode, function (t) { $('kopier-melding').textContent = t; });
+  }
+
+  // Åpner et resultat fra en innlimt kode, lenke eller lagret fil.
+  function hentResultat() {
+    var tekst = $('hent-kode').value;
+    var koder = PT.kode.finnKoder(tekst);
+    $('hent-feil').textContent = '';
+    if (!tekst.trim()) { $('hent-feil').textContent = 'Lim inn en kode eller lenke, eller velg en fil.'; return; }
+    try {
+      // Ingen hel kode funnet: la lesKode forklare hva som er galt.
+      if (!koder.length) koder = [tekst.trim()];
+      var lest = koder.map(function (k) { return PT.kode.lesKode(k, IPIP, ECR); });
+      if (koder.length > 2) throw new Error('Teksten inneholder flere enn to koder. Lim inn én om gangen.');
+      if (koder.length === 2) { location.href = 'par.html#' + koder[0] + '+' + koder[1]; return; }
+      // Husk resultatet bare når det ikke ligger noe her fra før.
+      if ($('hent-husk').checked && !PT.lagring.les()) {
+        var lagret = PT.lagring.skriv({ versjon: 1, navn: lest[0].navn, ferdig: true, kode: koder[0] });
+        if (lagret) PT.lagring.beOmVarig();
+      }
+      location.href = 'resultat.html#' + koder[0];
+    } catch (e) { $('hent-feil').textContent = e.message; }
+  }
+
+  function lesFil(fil) {
+    if (!fil) return;
+    var leser = new FileReader();
+    leser.onload = function () { $('hent-kode').value = leser.result; hentResultat(); };
+    leser.onerror = function () { $('hent-feil').textContent = 'Kunne ikke lese fila. Åpne den og kopier koden i stedet.'; };
+    leser.readAsText(fil);
   }
 
   function startPaNytt() {
-    if (!window.confirm('Vil du slette svarene dine på denne telefonen og begynne helt på nytt?')) return;
+    var ferdig = tilstand && tilstand.ferdig;
+    if (!window.confirm(ferdig
+      ? 'Resultatet ditt slettes fra denne telefonen. Uten lenken eller koden kan det ikke hentes fram igjen. Vil du fortsette?'
+      : 'Vil du slette svarene dine på denne telefonen og begynne helt på nytt?')) return;
     PT.lagring.slett();
     tilstand = null;
     visStart();
@@ -261,6 +294,7 @@
       a.addEventListener('click', function (e) {
         e.preventDefault();
         var s = PT.testdata.svarFor(a.getAttribute('data-id'));
+        demo = true;
         tilstand = nyTilstand(s.navn);
         tilstand.ipip = s.ipip; tilstand.ecr = s.ecr; tilstand.steg = N_TOTALT - 1;
         fullfor();
@@ -282,6 +316,9 @@
   });
   $('knapp-start-pa-nytt').addEventListener('click', startPaNytt);
   $('knapp-ta-pa-nytt').addEventListener('click', startPaNytt);
+  $('knapp-ta-vare').addEventListener('click', visFerdig);
+  $('knapp-hent').addEventListener('click', hentResultat);
+  $('hent-fil').addEventListener('change', function () { lesFil(this.files[0]); this.value = ''; });
   $('knapp-intro-videre').addEventListener('click', function () {
     tilstand.steg = tilstand.visning.del === 1 ? 0 : N_IPIP;
     visSporsmal();

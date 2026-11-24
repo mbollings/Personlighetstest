@@ -31,5 +31,25 @@ PT.lagring = (function () {
     try { window.localStorage.removeItem(NOKKEL); } catch (e) { /* ingenting å gjøre */ }
   }
 
-  return { les: les, skriv: skriv, slett: slett };
+  // Sjekker om nettleseren faktisk lagrer noe. Bruker en egen nøkkel, så svarene ikke røres.
+  // Merk: en privat fane kan svare ja her, men slette alt når fanen lukkes.
+  function virker() {
+    try {
+      window.localStorage.setItem(NOKKEL + '-prove', '1');
+      var ok = window.localStorage.getItem(NOKKEL + '-prove') === '1';
+      window.localStorage.removeItem(NOKKEL + '-prove');
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Ber nettleseren om ikke å rydde bort dataene av seg selv. Den kan si nei.
+  function beOmVarig() {
+    try {
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () { /* nei er greit */ });
+    } catch (e) { /* ikke støttet */ }
+  }
+
+  return { les: les, skriv: skriv, slett: slett, virker: virker, beOmVarig: beOmVarig };
 })();

@@ -105,5 +105,17 @@ PT.kode = (function () {
     return { navn: navn, profil: PT.skaring.profilFraSummer(fasettSummer, ecrSummer, ipip, ecr) };
   }
 
-  return { lagKode: lagKode, lesKode: lesKode, kontrolltegn: kontrolltegn };
+  // Finner alt som ser ut som resultatkoder i en tekst: en kode, en lenke, en parlenke
+  // (to koder med + imellom) eller innholdet i en lagret fil. Samme kode tas med én gang.
+  // Kodene er ikke kontrollert her; det gjør lesKode.
+  function finnKoder(tekst) {
+    var monster = /(?:^|[^0-9a-z])(1[0-9a-z]{34}[0-9a-z_](?:-[^\s<>"+]*)?)(?![0-9a-z_])/gi;
+    var funnet = [], t;
+    while ((t = monster.exec(String(tekst || ''))) !== null) {
+      if (funnet.indexOf(t[1]) < 0) funnet.push(t[1]);
+    }
+    return funnet;
+  }
+
+  return { lagKode: lagKode, lesKode: lesKode, finnKoder: finnKoder, kontrolltegn: kontrolltegn };
 })();

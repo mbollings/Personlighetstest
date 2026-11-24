@@ -1,6 +1,6 @@
 // rapport.js – bygger den individuelle rapporten ut fra resultatkoden i lenken (#kode).
 // Oppbygning: forside med fingeravtrykk og arketype → 01 Portrett → 02 De fem trekkene →
-// 03 Trekk for trekk → 04 Nære relasjoner → 05 Del med partneren.
+// 03 Trekk for trekk → 04 Nære relasjoner → 05 Ta vare på og del.
 
 (function () {
   'use strict';
@@ -137,8 +137,9 @@
     h += '<p class="svak">' + esc(tk.glidende) + '</p>';
 
     // --- 05 Del ---
-    h += kapittel(5, 'Del med partneren din');
-    h += '<p class="svak">Når dere begge har tatt testen, kan dere legge inn begge kodene på parsiden og få en felles rapport.</p>' +
+    h += kapittel(5, 'Ta vare på og del');
+    h += '<div id="lagre-boks" class="kort uthevet"></div>';
+    h += '<h3>Del med partneren din</h3><p class="svak">Når dere begge har tatt testen, kan dere legge inn begge kodene på parsiden og få en felles rapport.</p>' +
       '<p class="kode">' + esc(kode) + '</p><div class="knapper">' +
       '<a class="knapp" href="par.html#' + esc(kode) + '">Gå til parsiden</a>' +
       '<button class="knapp sekundar" id="knapp-kopier">Kopier koden</button></div>' +
@@ -151,6 +152,7 @@
       '<p><a href="index.html">← Til forsiden</a></p></footer>';
 
     main.innerHTML = h;
+    PT.del.lagreBoks(document.getElementById('lagre-boks'), kode, navn);
 
     document.getElementById('knapp-kopier').addEventListener('click', function () {
       PT.del.kopier(kode, function (ok) {

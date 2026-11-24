@@ -134,6 +134,19 @@ label { display: block; font-weight: 600; margin-bottom: 6px; }
 .feilmelding { color: #b4442f; font-size: .88rem; margin: 6px 0 0; }
 .feilmelding:empty { display: none; }
 
+/* Hent et lagret resultat på forsiden */
+.hent { margin-top: 18px; padding: 16px 20px; }
+.hent summary { cursor: pointer; font-weight: 600; }
+.hent[open] summary { margin-bottom: 14px; }
+.hent textarea { width: 100%; padding: 12px 18px; font: inherit; border-radius: 14px; border: 1px solid var(--linje); background: var(--bakgrunn); color: var(--tekst); resize: vertical; }
+.hent textarea:focus, .skjult-felt:focus-visible { outline: 3px solid var(--aksent-svak); outline-offset: 2px; }
+.hent .knapp { margin-bottom: 0; }
+.hent-husk { margin: 10px 0 0; }
+.hent-husk label { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+.hent-husk input { width: 22px; height: 22px; flex: none; margin: 2px 0 0; accent-color: var(--aksent); }
+.skjult-felt { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+#lagre-boks [data-melding]:empty { display: none; }
+
 /* ---------- Forside ---------- */
 .hero-figur { display: flex; justify-content: center; margin: 4px 0 6px; }
 .hero-figur svg { width: min(240px, 70vw); height: auto; }

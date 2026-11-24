@@ -6,10 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f3ee">
   <title>Personlighetstest</title>
-  <link rel="stylesheet" href="css/stil.css">
+  <link rel="stylesheet" href="css/stil.css?v=2">
 </head>
 <body>
 <main class="side" id="app">
+
+  <!-- Vises bare når nettleseren ikke lagrer svarene -->
+  <div id="lagre-varsel" class="forbehold skjult" role="alert">
+    <strong>Nettleseren lagrer ikke svarene dine</strong>
+    Lukker du siden, er de borte. Åpne siden i en vanlig fane, eller ta vare på lenken når du er ferdig.
+  </div>
 
   <!-- 1. Forside -->
   <section id="vis-start">
@@ -42,6 +48,7 @@
       <p style="margin-bottom:10px"><strong>Du har tatt testen.</strong></p>
       <div class="knapper">
         <a class="knapp" id="lenke-se-resultat" href="resultat.html">Se resultatet ditt</a>
+        <button class="knapp sekundar" id="knapp-ta-vare">Ta vare på resultatet</button>
         <button class="knapp sekundar" id="knapp-ta-pa-nytt">Ta testen på nytt</button>
       </div>
     </div>
@@ -50,10 +57,24 @@
       <label for="navn">Fornavnet ditt</label>
       <input type="text" id="navn" autocomplete="given-name" maxlength="30" placeholder="F.eks. Kari">
       <p class="svak liten" style="margin-top:6px">Navnet vises bare i rapporten og i resultatkoden du selv velger å dele.</p>
+      <p class="svak liten">Bruk en vanlig fane, ikke privat, og samme nettleser hele veien. Ellers kan svarene bli borte.</p>
       <div class="knapper">
         <button class="knapp" id="knapp-start">Start testen</button>
       </div>
     </div>
+
+    <details id="hent-boks" class="kort hent">
+      <summary>Har du en kode, lenke eller fil fra før?</summary>
+      <label for="hent-kode">Lim inn koden eller lenken</label>
+      <textarea id="hent-kode" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="F.eks. 1a7c…-Kari"></textarea>
+      <p class="feilmelding" id="hent-feil" aria-live="polite"></p>
+      <p id="hent-husk-rad" class="hent-husk"><label><input type="checkbox" id="hent-husk"> Dette er mitt resultat. Husk det i denne nettleseren.</label></p>
+      <div class="knapper">
+        <button class="knapp" id="knapp-hent">Åpne resultatet</button>
+        <label class="knapp sekundar" for="hent-fil">Velg lagret fil</label>
+        <input type="file" id="hent-fil" class="skjult-felt" accept=".txt,text/plain">
+      </div>
+    </details>
 
     <p class="sentrert liten" style="margin-top:20px"><a href="par.html">Har dere begge tatt testen? Gå til parsiden →</a></p>
     <p class="sentrert liten svak" id="demo-lenker"></p>
@@ -90,6 +111,7 @@
     <div class="hero-figur" id="ferdig-figur" aria-hidden="true"></div>
     <div class="sentrert"><p class="overlinje">Ferdig</p><h1>Takk, <span id="ferdig-navn"></span>!</h1></div>
     <p>Du har svart på alle 156 påstandene. Resultatet ditt er klart.</p>
+    <div id="lagre-boks" class="kort uthevet"></div>
     <div class="knapper"><a class="knapp" id="lenke-resultat" href="resultat.html">Se resultatet ditt</a></div>
 
     <h2>Del med partneren din</h2>
@@ -108,11 +130,11 @@
 <script src="data/ipip-neo-120.js"></script>
 <script src="data/ecr-r.js"></script>
 <script src="js/skaring.js"></script>
-<script src="js/kode.js"></script>
-<script src="js/lagring.js"></script>
-<script src="js/del.js"></script>
+<script src="js/kode.js?v=2"></script>
+<script src="js/lagring.js?v=2"></script>
+<script src="js/del.js?v=2"></script>
 <script src="js/testdata.js"></script>
 <script src="js/diagrammer.js"></script>
-<script src="js/testflyt.js"></script>
+<script src="js/testflyt.js?v=2"></script>
 </body>
 </html>
